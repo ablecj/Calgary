@@ -99,32 +99,6 @@ swiper.on("slideChangeTransitionStart", function () {
   );
 });
 
-
-// swiper.on("slideChangeTransitionStart", function () {
-//   const activeBannerImg = document.querySelector(
-//     ".swiper-slide-active .banner-img"
-//   );
-
-//   if (!activeBannerImg) return;
-
-//   gsap.killTweensOf(activeBannerImg);
-
-
-//   gsap.fromTo(
-//     activeBannerImg,
-//     {
-//       y: -60,            
-//       opacity: 0,
-//     },
-//     {
-//       y: 0,
-//       opacity: 1,
-//       duration: 1.6,     
-//       ease: "power2.out" 
-//     }
-//   );
-// });
-
 // third sdection swiper
 // Swiper init
 var gsapSwiper = new Swiper(".myGsapSwiper", {
@@ -437,83 +411,166 @@ textImageSwiper.on("slideChangeTransitionStart", function () {
 // });
 
 
+// window.addEventListener("load", () => {
+//   const slides = [...document.querySelectorAll(".para-item")];
+
+//   const slowSlides = new Set([0, 2]); 
+//   const zoomSlides = new Set([1, 3]); 
+
+//   let viewportHeight = window.innerHeight;
+
+//   let targetScroll = window.scrollY;
+//   let smoothScroll = window.scrollY;
+//   let ticking = false;
+
+//   const lerp = (a, b, n) => a + (b - a) * n;
+
+//   const easeInOut = (t) =>
+//     t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+
+//   function animate() {
+//     smoothScroll = lerp(smoothScroll, targetScroll, 0.06);
+
+//     slides.forEach((slide, index) => {
+//       const img = slide.querySelector(".para-img");
+//       if (!img) return;
+
+//       const rect = slide.getBoundingClientRect();
+
+//       const start = viewportHeight * 1.1;
+//       const end = -rect.height * 0.8;
+
+//       let progress = (rect.top - start) / (end - start);
+//       progress = Math.min(Math.max(progress, 0), 1);
+
+   
+//       const focus = 1 - Math.abs(progress - 0.5) * 2;
+//       const easedFocus = easeInOut(Math.max(0, focus));
+
+    
+//       let speed = parseFloat(slide.dataset.speed || 0.3);
+
+      
+//       if (slowSlides.has(index)) {
+//         speed *= 0.45; 
+//       }
+
+     
+//       const y = (progress - 0.5) * 120 * speed * easedFocus;
+//       img.style.setProperty("--y", `${y}%`);
+
+    
+//       if (zoomSlides.has(index)) {
+//         const scale = lerp(1.14, 1.38, easedFocus);
+//         img.style.setProperty("--scale", scale.toFixed(3));
+//       } else {
+//         img.style.setProperty("--scale", "1.14");
+//       }
+//     });
+
+//     ticking = false;
+//   }
+
+//   function onScroll() {
+//     targetScroll = window.scrollY;
+//     if (!ticking) {
+//       ticking = true;
+//       requestAnimationFrame(animate);
+//     }
+//   }
+
+//   window.addEventListener("scroll", onScroll, { passive: true });
+
+//   window.addEventListener("resize", () => {
+//     viewportHeight = window.innerHeight;
+//   });
+
+//   animate();
+// });
+
 window.addEventListener("load", () => {
   const slides = [...document.querySelectorAll(".para-item")];
 
-  const slowSlides = new Set([0, 2]); // 1st & 3rd
-  const zoomSlides = new Set([1, 3]); // 2nd & 4th
+  const slowSlides = new Set([0, 2]);
+  const zoomSlides = new Set([1, 3]); 
 
   let viewportHeight = window.innerHeight;
 
+  let currentScroll = window.scrollY;
   let targetScroll = window.scrollY;
-  let smoothScroll = window.scrollY;
-  let ticking = false;
 
   const lerp = (a, b, n) => a + (b - a) * n;
 
   const easeInOut = (t) =>
     t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 
-  function animate() {
-    smoothScroll = lerp(smoothScroll, targetScroll, 0.06);
+ 
+  let slideData = [];
 
-    slides.forEach((slide, index) => {
-      const img = slide.querySelector(".para-img");
-      if (!img) return;
-
+  function measure() {
+    viewportHeight = window.innerHeight;
+    slideData = slides.map((slide) => {
       const rect = slide.getBoundingClientRect();
+      return {
+        el: slide,
+        img: slide.querySelector(".para-img"),
+        top: rect.top + window.scrollY,
+        height: rect.height,
+        speed: parseFloat(slide.dataset.speed || 0.3),
+      };
+    });
+  }
 
-      const start = viewportHeight * 1.1;
-      const end = -rect.height * 0.8;
+  measure();
 
-      let progress = (rect.top - start) / (end - start);
+
+  function raf() {
+    currentScroll = lerp(currentScroll, targetScroll, 0.08);
+
+    slideData.forEach((item, index) => {
+      if (!item.img) return;
+
+      const start = item.top - viewportHeight * 1.1;
+      const end = item.top + item.height * 0.8;
+
+      let progress = (currentScroll - start) / (end - start);
       progress = Math.min(Math.max(progress, 0), 1);
 
-      /* CENTER FOCUS */
       const focus = 1 - Math.abs(progress - 0.5) * 2;
       const easedFocus = easeInOut(Math.max(0, focus));
 
-      /* BASE SPEED FROM HTML */
-      let speed = parseFloat(slide.dataset.speed || 0.3);
+      let speed = item.speed;
+      if (slowSlides.has(index)) speed *= 0.45;
 
-      /* EXTRA SLOW FOR 1st & 3rd */
-      if (slowSlides.has(index)) {
-        speed *= 0.45; // slow & heavy feel
-      }
 
-      /* PARALLAX TRANSLATION */
       const y = (progress - 0.5) * 120 * speed * easedFocus;
-      img.style.setProperty("--y", `${y}%`);
 
-      /* ZOOM LOGIC */
-      if (zoomSlides.has(index)) {
-        const scale = lerp(1.14, 1.38, easedFocus);
-        img.style.setProperty("--scale", scale.toFixed(3));
-      } else {
-        img.style.setProperty("--scale", "1.14");
-      }
+      const scale = zoomSlides.has(index)
+        ? lerp(1.12, 1.34, easedFocus)
+        : 1.12;
+
+      item.img.style.transform = `
+        translate3d(0, ${y}%, 0)
+        scale(${scale})
+      `;
     });
 
-    ticking = false;
+    requestAnimationFrame(raf);
   }
 
-  function onScroll() {
-    targetScroll = window.scrollY;
-    if (!ticking) {
-      ticking = true;
-      requestAnimationFrame(animate);
-    }
-  }
 
-  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener(
+    "scroll",
+    () => {
+      targetScroll = window.scrollY;
+    },
+    { passive: true }
+  );
 
-  window.addEventListener("resize", () => {
-    viewportHeight = window.innerHeight;
-  });
+  window.addEventListener("resize", measure);
 
-  animate();
+  raf();
 });
-
 
 
 
