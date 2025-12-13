@@ -4,12 +4,11 @@ var swiper = new Swiper(".myBannerSwiper", {
   effect: "fade",
   loop: true,
 
-  // autoplay: {
-  //   delay: 2000,
-  //   disableOnInteraction: false,
-  // },
+  autoplay: {
+    delay: 2000,
+    disableOnInteraction: false,
+  },
 
-  autoplay: false,
 
   speed: 800,
 

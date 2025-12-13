@@ -1421,11 +1421,11 @@ section.promo-section img {
     height: 85vh !important;
   }
     .grey_bg {
-    display: none;
+    display: none !important;
   }
 
-  section.promo-section{
-    height: 75vh;
+  section.promo-section {
+    height: 75vh !important;
   }
 
   .promo-content{
