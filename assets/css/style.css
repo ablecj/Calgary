@@ -1372,10 +1372,10 @@ section.promo-section img {
   }
 
   .para-item {
-    height: 105vh;
+    height: 105vh !important;
   }
   .para-item-even{
-    height: 85vh;
+    height: 85vh !important;
   }
 
 
