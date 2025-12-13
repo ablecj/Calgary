@@ -1444,9 +1444,9 @@ section.promo-section img {
   .banner-text h1 {
     font-size: 32px;
   }
-  .banner-text p {
+  /* .banner-text p {
     max-width: 280px;
-  }
+  } */
   .promo-content h1 {
     font-size: 24px;
   }
