@@ -4,10 +4,13 @@ var swiper = new Swiper(".myBannerSwiper", {
   effect: "fade",
   loop: true,
 
-  autoplay: {
-    delay: 2000,
-    disableOnInteraction: false,
-  },
+  // autoplay: {
+  //   delay: 2000,
+  //   disableOnInteraction: false,
+  // },
+
+  autoplay: false,
+
   speed: 800,
 
   pagination: {
@@ -24,29 +27,104 @@ var swiper = new Swiper(".myBannerSwiper", {
 
 // GSAP animation on slide change
 swiper.on("slideChangeTransitionStart", function () {
-  const activeBannerImg = document.querySelector(
-    ".swiper-slide-active .banner-img"
+  const activeSlide = document.querySelector(".swiper-slide-active");
+  if (!activeSlide) return;
+
+  const bannerImg = activeSlide.querySelector(".banner-img");
+  const bannerText = activeSlide.querySelector(".banner-text");
+  const bannerBtn = activeSlide.querySelector(".banner-btn");
+
+  // Kill previous tweens
+  gsap.killTweensOf([bannerImg, bannerText, bannerBtn]);
+
+  // IMAGE — luxury vertical reveal mask
+  gsap.fromTo(
+    bannerImg,
+    {
+      clipPath: "inset(100% 0% 0% 0%)",
+      y: 40,
+    },
+    {
+      clipPath: "inset(0% 0% 0% 0%)",
+      y: 0,
+      duration: 1.8,
+      ease: "power4.out",
+    }
   );
 
-  if (!activeBannerImg) return;
-
-  gsap.killTweensOf(activeBannerImg);
-
-
+  // IMAGE — subtle depth float (runs in parallel)
   gsap.fromTo(
-    activeBannerImg,
+    bannerImg,
     {
-      y: -60,            
+      scale: 1.03,
+    },
+    {
+      scale: 1,
+      duration: 3,
+      ease: "power2.out",
+    }
+  );
+
+  // TEXT — diagonal cinematic entrance
+  gsap.fromTo(
+    bannerText,
+    {
+      x: -40,
+      y: 40,
+      opacity: 0,
+    },
+    {
+      x: 0,
+      y: 0,
+      opacity: 1,
+      duration: 1.2,
+      delay: 0.4,
+      ease: "power3.out",
+    }
+  );
+
+  // BUTTON — confident delayed reveal
+  gsap.fromTo(
+    bannerBtn,
+    {
+      y: 20,
       opacity: 0,
     },
     {
       y: 0,
       opacity: 1,
-      duration: 1.6,     
-      ease: "power2.out" 
+      duration: 0.9,
+      delay: 0.9,
+      ease: "power2.out",
     }
   );
 });
+
+
+// swiper.on("slideChangeTransitionStart", function () {
+//   const activeBannerImg = document.querySelector(
+//     ".swiper-slide-active .banner-img"
+//   );
+
+//   if (!activeBannerImg) return;
+
+//   gsap.killTweensOf(activeBannerImg);
+
+
+//   gsap.fromTo(
+//     activeBannerImg,
+//     {
+//       y: -60,            
+//       opacity: 0,
+//     },
+//     {
+//       y: 0,
+//       opacity: 1,
+//       duration: 1.6,     
+//       ease: "power2.out" 
+//     }
+//   );
+// });
 
 // third sdection swiper
 // Swiper init
