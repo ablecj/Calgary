@@ -279,285 +279,88 @@ textImageSwiper.on("slideChangeTransitionStart", function () {
 
 // parallax effect
 
-// window.addEventListener('load', () => {
-//   const slides = [...document.querySelectorAll('.para-item')];
-//   const zoomSlides = new Set([1, 3]);
-//   let viewportHeight = window.innerHeight;
-//   let ticking = false;
-
-//   function update() {
-//     slides.forEach((slide, index) => {
-//       const img = slide.querySelector('.para-img');
-//       if (!img) return;
-
-//       const rect = slide.getBoundingClientRect();
-//       const start = viewportHeight;
-//       const end = -rect.height;
-
-//       let progress = (rect.top - start) / (end - start);
-//       progress = Math.min(Math.max(progress, 0), 1);
-
-
-//       const y = (progress - 0.5) * 25;
-//       img.style.setProperty('--y', `${y}%`);
-
-   
-//       if (zoomSlides.has(index)) {
-//         const intensity = Math.pow(
-//           1 - Math.abs(progress - 0.5) / 0.5,
-//           2
-//         );
-//         const scale = 1.1 + (1.25 - 1.1) * intensity;
-//         img.style.setProperty('--scale', scale.toFixed(3));
-//       } else {
-//         img.style.setProperty('--scale', '1.1');
-//       }
-//     });
-
-//     ticking = false;
-//   }
-
-//   function onScroll() {
-//     if (!ticking) {
-//       ticking = true;
-//       requestAnimationFrame(update);
-//     }
-//   }
-
-//   window.addEventListener('scroll', onScroll, { passive: true });
-//   window.addEventListener('resize', () => {
-//     viewportHeight = window.innerHeight;
-//     update();
-//   });
-
-//   update();
-// });
-
-
-// new para
-// CINEMATIC SMOOTH PARALLAX (JS ONLY – no HTML/CSS changes)
-
-// ULTRA SMOOTH CINEMATIC PARALLAX
-// JS ONLY — no HTML / CSS changes
-
-// window.addEventListener("load", () => {
-//   const slides = [...document.querySelectorAll(".para-item")];
-//   const zoomSlides = new Set([1, 3]);
-
-//   let viewportHeight = window.innerHeight;
-
-//   let targetScroll = window.scrollY;
-//   let smoothScroll = window.scrollY;
-
-//   let ticking = false;
-
-//   const lerp = (a, b, n) => a + (b - a) * n;
-//   const easeInOut = (t) =>
-//     t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-
-//   function animate() {
-//     smoothScroll = lerp(smoothScroll, targetScroll, 0.06);
-
-//     slides.forEach((slide, index) => {
-//       const img = slide.querySelector(".para-img");
-//       if (!img) return;
-
-//       const rect = slide.getBoundingClientRect();
-
-//       const start = viewportHeight * 1.1;
-//       const end = -rect.height * 0.8;
-
-//       let progress = (rect.top - start) / (end - start);
-//       progress = Math.min(Math.max(progress, 0), 1);
-
-   
-//       const focus = 1 - Math.abs(progress - 0.5) * 2;
-//       const easedFocus = easeInOut(Math.max(0, focus));
-
-
-//       const speed = parseFloat(slide.dataset.speed || 0.3);
-
-   
-//       const y = (progress - 0.5) * 120 * speed * easedFocus;
-//       img.style.setProperty("--y", `${y}%`);
-
- 
-//       if (zoomSlides.has(index)) {
-//         const scale = lerp(1.14, 1.38, easedFocus);
-//         img.style.setProperty("--scale", scale.toFixed(3));
-//       } else {
-//         img.style.setProperty("--scale", "1.14");
-//       }
-//     });
-
-//     ticking = false;
-//   }
-
-//   function onScroll() {
-//     targetScroll = window.scrollY;
-//     if (!ticking) {
-//       ticking = true;
-//       requestAnimationFrame(animate);
-//     }
-//   }
-
-//   window.addEventListener("scroll", onScroll, { passive: true });
-
-//   window.addEventListener("resize", () => {
-//     viewportHeight = window.innerHeight;
-//   });
-
-//   animate();
-// });
-
-
-// window.addEventListener("load", () => {
-//   const slides = [...document.querySelectorAll(".para-item")];
-
-//   const slowSlides = new Set([0, 2]); 
-//   const zoomSlides = new Set([1, 3]); 
-
-//   let viewportHeight = window.innerHeight;
-
-//   let targetScroll = window.scrollY;
-//   let smoothScroll = window.scrollY;
-//   let ticking = false;
-
-//   const lerp = (a, b, n) => a + (b - a) * n;
-
-//   const easeInOut = (t) =>
-//     t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-
-//   function animate() {
-//     smoothScroll = lerp(smoothScroll, targetScroll, 0.06);
-
-//     slides.forEach((slide, index) => {
-//       const img = slide.querySelector(".para-img");
-//       if (!img) return;
-
-//       const rect = slide.getBoundingClientRect();
-
-//       const start = viewportHeight * 1.1;
-//       const end = -rect.height * 0.8;
-
-//       let progress = (rect.top - start) / (end - start);
-//       progress = Math.min(Math.max(progress, 0), 1);
-
-   
-//       const focus = 1 - Math.abs(progress - 0.5) * 2;
-//       const easedFocus = easeInOut(Math.max(0, focus));
-
-    
-//       let speed = parseFloat(slide.dataset.speed || 0.3);
-
-      
-//       if (slowSlides.has(index)) {
-//         speed *= 0.45; 
-//       }
-
-     
-//       const y = (progress - 0.5) * 120 * speed * easedFocus;
-//       img.style.setProperty("--y", `${y}%`);
-
-    
-//       if (zoomSlides.has(index)) {
-//         const scale = lerp(1.14, 1.38, easedFocus);
-//         img.style.setProperty("--scale", scale.toFixed(3));
-//       } else {
-//         img.style.setProperty("--scale", "1.14");
-//       }
-//     });
-
-//     ticking = false;
-//   }
-
-//   function onScroll() {
-//     targetScroll = window.scrollY;
-//     if (!ticking) {
-//       ticking = true;
-//       requestAnimationFrame(animate);
-//     }
-//   }
-
-//   window.addEventListener("scroll", onScroll, { passive: true });
-
-//   window.addEventListener("resize", () => {
-//     viewportHeight = window.innerHeight;
-//   });
-
-//   animate();
-// });
-
 window.addEventListener("load", () => {
   const slides = [...document.querySelectorAll(".para-item")];
-
-  const slowSlides = new Set([0, 2]);
-  const zoomSlides = new Set([1, 3]); 
+  const slowSlides = new Set([0, 2]); // heavy depth
 
   let viewportHeight = window.innerHeight;
+  let isMobile = window.innerWidth <= 768 || "ontouchstart" in window;
 
   let currentScroll = window.scrollY;
   let targetScroll = window.scrollY;
+  let scrollVelocity = 0;
 
   const lerp = (a, b, n) => a + (b - a) * n;
+  const cinematicEase = (t) => Math.sin(t * Math.PI * 0.5);
 
-  const easeInOut = (t) =>
-    t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-
- 
   let slideData = [];
 
   function measure() {
     viewportHeight = window.innerHeight;
+    isMobile = window.innerWidth <= 768 || "ontouchstart" in window;
+
     slideData = slides.map((slide) => {
       const rect = slide.getBoundingClientRect();
       return {
-        el: slide,
         img: slide.querySelector(".para-img"),
         top: rect.top + window.scrollY,
         height: rect.height,
-        speed: parseFloat(slide.dataset.speed || 0.3),
+        speed: parseFloat(slide.dataset.speed || 0.22),
+        depth: parseFloat(slide.dataset.depth || 1),
       };
     });
   }
 
   measure();
 
-
   function raf() {
-    currentScroll = lerp(currentScroll, targetScroll, 0.08);
+    const prevScroll = currentScroll;
+    currentScroll = lerp(
+      currentScroll,
+      targetScroll,
+      isMobile ? 0.18 : 0.1
+    );
+    scrollVelocity = currentScroll - prevScroll;
 
     slideData.forEach((item, index) => {
       if (!item.img) return;
 
-      const start = item.top - viewportHeight * 1.1;
-      const end = item.top + item.height * 0.8;
+      const start = item.top - viewportHeight;
+      const end = item.top + item.height;
 
       let progress = (currentScroll - start) / (end - start);
       progress = Math.min(Math.max(progress, 0), 1);
 
-      const focus = 1 - Math.abs(progress - 0.5) * 2;
-      const easedFocus = easeInOut(Math.max(0, focus));
+      const centerWeight = 1 - Math.abs(progress - 0.5) * 2;
+      const focus = cinematicEase(Math.max(0, centerWeight));
 
-      let speed = item.speed;
-      if (slowSlides.has(index)) speed *= 0.45;
+      let depth = item.depth;
+      if (slowSlides.has(index)) depth *= 0.6;
 
+      const y =
+        (progress - 0.5) * 110 * item.speed * depth * focus;
 
-      const y = (progress - 0.5) * 120 * speed * easedFocus;
+      const inertia = Math.max(
+        Math.min(scrollVelocity * 0.15, 6),
+        -6
+      );
 
-      const scale = zoomSlides.has(index)
-        ? lerp(1.12, 1.34, easedFocus)
-        : 1.12;
+      if (isMobile) {
+        item.img.style.transform = `
+          translate3d(0, ${y + inertia}%, 0)
+        `;
+      } else {
+        const scale = 1 + focus * 0.035; // safe desktop zoom
 
-      item.img.style.transform = `
-        translate3d(0, ${y}%, 0)
-        scale(${scale})
-      `;
+        item.img.style.transform = `
+          translate3d(0, ${y + inertia}%, 0)
+          scale(${scale})
+        `;
+      }
     });
 
     requestAnimationFrame(raf);
   }
-
 
   window.addEventListener(
     "scroll",
@@ -571,6 +374,7 @@ window.addEventListener("load", () => {
 
   raf();
 });
+
 
 
 

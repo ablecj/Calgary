@@ -544,26 +544,21 @@ section.promo-section img {
   position: sticky;
   top: 0;
 
-  width: 100%;
+  width: 110vw;
   height: 130vh;
   margin-left: -5vw;
-  margin-top: -5vh;     
-
-  left: 0;
-  top: 0;
+  margin-top: -5vh;
 
   --y: 0%;
   --scale: 1.1;
 
-  transform:
-    translate3d(0, var(--y), 0)
-    scale(var(--scale));
+  transform: translate3d(0, var(--y), 0) scale(var(--scale));
 
   object-fit: cover;
 
   will-change: transform;
-  transition: transform 0.25s ease-out;
 }
+
 
 
 /* Overlay */
@@ -1261,6 +1256,14 @@ section.promo-section img {
   .about_sec_cont_wrap {
     height: auto;
   }
+    .para-img {
+    height: 110vh;
+    margin-left: 0;
+    margin-top: 0;
+
+    --scale: 1;
+    transform: translate3d(0, var(--y), 0);
+  }
  
 }
 
@@ -1390,6 +1393,7 @@ section.promo-section img {
   .parallax-gallery .para-img {
     min-width: 100%;
     min-height: 130%;
+
   }
 
   .partner-title {
