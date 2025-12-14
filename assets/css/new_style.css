@@ -39,20 +39,44 @@ p{
 }
 
 /* navbar */
-.logo_img {
-  height: 54px;
-}
-/* Glassmorphism Navbar */
 .glass-navbar {
-  backdrop-filter: blur(0px);
-  -webkit-backdrop-filter: blur(10px);
-  z-index: 10;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
   padding: 8px 0 94px 0;
+  transition: all 0.35s ease;
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0.9) 0%,
     rgba(0, 0, 0, 0) 100%
   );
+}
+
+/* Logo default size */
+.logo_img {
+  height: 54px;
+  transition: height 0.35s ease;
+}
+
+/* scrolled */
+.glass-navbar.navbar-scrolled {
+  position: fixed !important;
+  top: 0;
+  padding: 16px 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+/* Smaller logo on scroll */
+.glass-navbar.navbar-scrolled .logo_img {
+  height: 36px;
+}
+
+/* Optional: reduce logo circle if needed */
+.glass-navbar.navbar-scrolled .logo_circle_wrap img {
+  display: none;
 }
 
 .glass-navbar .nav-link,
@@ -73,6 +97,10 @@ p{
   align-items: center;
   display: flex;
   padding: 0;
+}
+
+.navbar-toggler:focus{
+  box-shadow: none !important;
 }
 
 /* Banner Section */
@@ -518,48 +546,39 @@ section.promo-section img {
   width: 100%;
 }
 
-/* Each slide */
+/* Slides */
 .para-item {
   position: relative;
   height: 125vh;
   overflow: hidden;
 }
-.para-item-even{
-    height: 110vh;
+
+.para-item-even {
+  height: 110vh;
 }
 
-/* Overlap slides */
+/* Overlap */
 .para-item.overlap {
   margin-top: -35vh;
 }
 
-/* Z-index stacking */
+/* Z stacking */
 .slide-1 { z-index: 1; }
 .slide-2 { z-index: 2; }
 .slide-3 { z-index: 3; }
 .slide-4 { z-index: 4; }
 
-/* Sticky image only */
+/* Image */
 .para-img {
-  position: sticky;
-  top: 0;
-
-  width: 110vw;
-  height: 130vh;
-  margin-left: -5vw;
-  margin-top: -5vh;
-
-  --y: 0%;
-  --scale: 1.1;
-
-  transform: translate3d(0, var(--y), 0) scale(var(--scale));
-
+  position: absolute;
+  top: -10%;
+  left: -5%;
+  width: 110%;
+  height: 120%;
   object-fit: cover;
-
+  transform: translate3d(0, 0, 0) scale(1.12);
   will-change: transform;
 }
-
-
 
 /* Overlay */
 .overlay-dark {
@@ -576,14 +595,14 @@ section.promo-section img {
   z-index: 9;
   color: #fff;
   font-size: clamp(28px, 6vw, 60px);
-  line-height: 70px;
+  line-height: 1.2;
   letter-spacing: 0.03em;
   text-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
   font-family: "IvyMode", serif;
   font-weight: 400;
 }
 
-/* Position helpers */
+/* Positions */
 .para-title.top-left {
   top: 78px;
   left: 117px;
@@ -594,7 +613,6 @@ section.promo-section img {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
 
 
 .p-0 {
@@ -1287,6 +1305,10 @@ section.promo-section img {
 }
 
 @media (max-width: 576px) {
+  .glass-navbar.navbar-scrolled .logo_img{
+    position: absolute;
+    top: 0;
+  }
   .logo_circle_wrap {
     width: 100%;
   }

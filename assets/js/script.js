@@ -1,3 +1,14 @@
+// navbar
+  const navbar = document.querySelector(".glass-navbar");
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 80) {
+      navbar.classList.add("navbar-scrolled");
+    } else {
+      navbar.classList.remove("navbar-scrolled");
+    }
+  });
+
 
 // SWIPER SETUP
 var swiper = new Swiper(".myBannerSwiper", {
@@ -279,202 +290,52 @@ textImageSwiper.on("slideChangeTransitionStart", function () {
 
 // parallax effect
 
-// window.addEventListener("load", () => {
-//   const slides = [...document.querySelectorAll(".para-item")];
-//   const slowSlides = new Set([0, 2]); 
-
-//   let viewportHeight = window.innerHeight;
-//   let isMobile = window.innerWidth <= 768 || "ontouchstart" in window;
-
-//   let currentScroll = window.scrollY;
-//   let targetScroll = window.scrollY;
-//   let scrollVelocity = 0;
-
-//   const lerp = (a, b, n) => a + (b - a) * n;
-//   const cinematicEase = (t) => Math.sin(t * Math.PI * 0.5);
-
-//   let slideData = [];
-
-//   function measure() {
-//     viewportHeight = window.innerHeight;
-//     isMobile = window.innerWidth <= 768 || "ontouchstart" in window;
-
-//     slideData = slides.map((slide) => {
-//       const rect = slide.getBoundingClientRect();
-//       return {
-//         img: slide.querySelector(".para-img"),
-//         top: rect.top + window.scrollY,
-//         height: rect.height,
-//         speed: parseFloat(slide.dataset.speed || 0.22),
-//         depth: parseFloat(slide.dataset.depth || 1),
-//       };
-//     });
-//   }
-
-//   measure();
-
-//   function raf() {
-//     const prevScroll = currentScroll;
-//     currentScroll = lerp(
-//       currentScroll,
-//       targetScroll,
-//       isMobile ? 0.18 : 0.1
-//     );
-//     scrollVelocity = currentScroll - prevScroll;
-
-//     slideData.forEach((item, index) => {
-//       if (!item.img) return;
-
-//       const start = item.top - viewportHeight;
-//       const end = item.top + item.height;
-
-//       let progress = (currentScroll - start) / (end - start);
-//       progress = Math.min(Math.max(progress, 0), 1);
-
-//       const centerWeight = 1 - Math.abs(progress - 0.5) * 2;
-//       const focus = cinematicEase(Math.max(0, centerWeight));
-
-//       let depth = item.depth;
-//       if (slowSlides.has(index)) depth *= 0.6;
-
-//       const y =
-//         (progress - 0.5) * 110 * item.speed * depth * focus;
-
-//       const inertia = Math.max(
-//         Math.min(scrollVelocity * 0.15, 6),
-//         -6
-//       );
-
-//       if (isMobile) {
-//         item.img.style.transform = `
-//           translate3d(0, ${y + inertia}%, 0)
-//         `;
-//       } else {
-//         const scale = 1 + focus * 0.035; 
-
-//         item.img.style.transform = `
-//           translate3d(0, ${y + inertia}%, 0)
-//           scale(${scale})
-//         `;
-//       }
-//     });
-
-//     requestAnimationFrame(raf);
-//   }
-
-//   window.addEventListener(
-//     "scroll",
-//     () => {
-//       targetScroll = window.scrollY;
-//     },
-//     { passive: true }
-//   );
-
-//   window.addEventListener("resize", measure);
-
-//   raf();
-// });
-
 window.addEventListener("load", () => {
   const slides = [...document.querySelectorAll(".para-item")];
-  const slowSlides = new Set([0, 2]);
-
   let viewportHeight = window.innerHeight;
-  let isMobile = window.innerWidth <= 768 || "ontouchstart" in window;
-
   let currentScroll = window.scrollY;
   let targetScroll = window.scrollY;
-  let scrollVelocity = 0;
-  let lastScroll = window.scrollY;
 
   const lerp = (a, b, n) => a + (b - a) * n;
-
-  /* Film-like easing */
-  const cinematicEase = (t) =>
-    Math.sin(t * Math.PI * 0.5);
 
   let slideData = [];
 
   function measure() {
     viewportHeight = window.innerHeight;
-    isMobile = window.innerWidth <= 768 || "ontouchstart" in window;
 
     slideData = slides.map((slide) => {
+      const img = slide.querySelector(".para-img");
       const rect = slide.getBoundingClientRect();
+
+      img.style.willChange = "transform";
+
       return {
-        img: slide.querySelector(".para-img"),
+        img,
         top: rect.top + window.scrollY,
         height: rect.height,
-        speed: parseFloat(slide.dataset.speed || 0.22),
+        speed: parseFloat(slide.dataset.speed || 0.25),
         depth: parseFloat(slide.dataset.depth || 1),
-        drift: Math.random() * 0.6 + 0.2, // organic feel
       };
     });
   }
 
   measure();
 
-  function raf() {
-    const prev = currentScroll;
-    currentScroll = lerp(
-      currentScroll,
-      targetScroll,
-      isMobile ? 0.18 : 0.1
-    );
+  function animate() {
+    currentScroll = lerp(currentScroll, targetScroll, 0.12);
 
-    scrollVelocity = currentScroll - prev;
-
-    slideData.forEach((item, index) => {
-      if (!item.img) return;
-
+    slideData.forEach((item) => {
       const start = item.top - viewportHeight;
       const end = item.top + item.height;
+      const progress = Math.min(Math.max((currentScroll - start) / (end - start), 0), 1);
 
-      let progress = (currentScroll - start) / (end - start);
-      progress = Math.min(Math.max(progress, 0), 1);
+      // Stronger parallax range
+      const moveY = (progress - 0.5) * viewportHeight * item.speed * item.depth;
 
-      /* Center camera focus */
-      const center = 1 - Math.abs(progress - 0.5) * 2;
-      const focus = cinematicEase(Math.max(0, center));
-
-      /* Depth + heaviness */
-      let depth = item.depth;
-      if (slowSlides.has(index)) depth *= 0.6;
-
-      /* Main parallax */
-      const baseY =
-        (progress - 0.5) *
-        120 *
-        item.speed *
-        depth *
-        focus;
-
-      /* Directional inertia (film camera lag) */
-      const inertia = Math.max(
-        Math.min(scrollVelocity * 0.18, 8),
-        -8
-      );
-
-      /* Micro organic drift (very subtle) */
-      const drift =
-        Math.sin(performance.now() * 0.0006 + item.drift) * 1.2;
-
-      if (isMobile) {
-        item.img.style.transform = `
-          translate3d(0, ${baseY + inertia + drift}%, 0)
-        `;
-      } else {
-        /* Desktop cinematic zoom */
-        const scale = 1 + focus * 0.04;
-
-        item.img.style.transform = `
-          translate3d(0, ${baseY + inertia + drift}%, 0)
-          scale(${scale})
-        `;
-      }
+      item.img.style.transform = `translate3d(0, ${moveY}px, 0) scale(1.12)`;
     });
 
-    requestAnimationFrame(raf);
+    requestAnimationFrame(animate);
   }
 
   window.addEventListener(
@@ -487,7 +348,7 @@ window.addEventListener("load", () => {
 
   window.addEventListener("resize", measure);
 
-  raf();
+  animate();
 });
 
 
